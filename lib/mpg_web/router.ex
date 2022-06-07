@@ -17,7 +17,10 @@ defmodule MpgWeb.Router do
   scope "/", MpgWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live "/", LobbyLive.Index, :index
+    live "/join", LobbyLive.Join, :join
+
+    live "/game/:code", GameLive
   end
 
   # Other scopes may use custom stacks.
