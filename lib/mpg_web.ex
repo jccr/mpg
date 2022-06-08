@@ -108,3 +108,7 @@ defmodule MpgWeb do
     apply(__MODULE__, which, [])
   end
 end
+
+defmodule MpgWeb.GameNotFoundError do
+  defexception [:message, plug_status: 404]
+end

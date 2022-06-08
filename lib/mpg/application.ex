@@ -8,6 +8,8 @@ defmodule Mpg.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      {Registry, keys: :unique, name: Mpg.GameRegistry},
+      Mpg.GameSupervisor,
       # Start the Telemetry supervisor
       MpgWeb.Telemetry,
       # Start the PubSub system
