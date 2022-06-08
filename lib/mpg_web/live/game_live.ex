@@ -2,6 +2,7 @@ defmodule MpgWeb.GameLive do
   use MpgWeb, :live_view
   alias Mpg.Player
   alias Mpg.Game
+  import ActionBar
 
   def changeset(params \\ %{}) do
     %Player{}
@@ -46,26 +47,34 @@ defmodule MpgWeb.GameLive do
     ~H"""
     <%= if !@player do %>
       <.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
-        <%= label f, :name %>
-        <%= text_input f, :name, [
-          minlength: 1,
-          maxlength: 12,
-          autofocus: true,
-          autocapitalize: "off",
-          autocorrect: "off",
-          autocomplete: "off",
-          spellcheck: false
-          ] %>
-        <%= error_tag f, :name %>
-
-        <%= submit "Save" %>
+        <div class="flex flex-col gap-4 h-64">
+          <%= label f, :name, "Give yourself a name", class: "text-2xl" %>
+          <%= text_input f, :name, [
+            class: "box-input text-center text-2xl",
+            minlength: 1,
+            maxlength: 12,
+            autofocus: true,
+            autocapitalize: "off",
+            autocorrect: "off",
+            autocomplete: "off",
+            spellcheck: false
+            ] %>
+          <%= error_tag f, :name %>
+        </div>
+        <.action_bar>
+          <%= submit "Continue", class: "btn-action" %>
+        </.action_bar>
       </.form>
     <% else %>
       Welcome, <%= @player.name %>
+      <div>
+        <h1>Players can join using code:</h1>
+        <span class="block box-input text-2xl"><%= @code %></span>
+      </div>
+      <.action_bar>
+        <button phx-click="start" class="btn-action">Start Game</button>
+      </.action_bar>
     <% end %>
-    <div>
-      <h1>Join using code: <%= @code %></h1>
-    </div>
     """
   end
 end

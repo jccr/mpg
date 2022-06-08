@@ -1,6 +1,7 @@
 defmodule MpgWeb.LobbyLive.Join do
   use MpgWeb, :live_view
   alias Mpg.Join
+  import ActionBar
 
   def changeset(params \\ %{}) do
     %Join{}
@@ -35,20 +36,24 @@ defmodule MpgWeb.LobbyLive.Join do
   def render(assigns) do
     ~H"""
     <.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
-    <%= label f, :code %>
-    <%= text_input f, :code, [
-      minlength: 4,
-      maxlength: 4,
-      autofocus: true,
-      autocapitalize: "characters",
-      autocorrect: "off",
-      autocomplete: "off",
-      spellcheck: false,
-      oninput: "let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-      ] %>
-    <%= error_tag f, :code %>
-
-    <%= submit "Join" %>
+      <div class="flex flex-col gap-4 h-64">
+        <%= label f, :code, "Join a game with this code", class: "text-2xl" %>
+        <%= text_input f, :code, [
+          class: "box-input text-center text-2xl",
+          minlength: 4,
+          maxlength: 4,
+          autofocus: true,
+          autocapitalize: "characters",
+          autocorrect: "off",
+          autocomplete: "off",
+          spellcheck: false,
+          oninput: "let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+          ] %>
+        <%= error_tag f, :code %>
+      </div>
+      <.action_bar>
+        <%= submit "Join",class: "btn-action" %>
+      </.action_bar>
     </.form>
     """
   end

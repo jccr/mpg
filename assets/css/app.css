@@ -5,3 +5,29 @@
 .alert:empty {
   display: none;
 }
+
+.invalid-feedback {
+  color: rgb(239 68 68);
+}
+
+.invalid-feedback:first-letter {
+  text-transform: uppercase;
+}
+
+@layer components {
+  .btn-primary {
+    @apply w-full p-3 mt-1 border-2 border-amber-600 rounded bg-amber-700 rounded-xl hover:bg-amber-600 active:bg-amber-800;
+  }
+  .btn-action {
+    @apply btn-primary flex-1;
+  }
+  .box-input {
+    @apply w-full p-3 mt-1 border-2 border-gray-400 rounded bg-gray-600 rounded-xl;
+  }
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 120%;
+  }
+}

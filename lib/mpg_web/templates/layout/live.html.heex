@@ -1,4 +1,4 @@
-<main class="flex flex-col justify-center items-center h-screen gap-4">
+<main class="container w-full md:max-w-3xl mx-auto h-screen p-4 flex flex-col justify-center items-center text-center">
   <p class="alert alert-info bg-green-200 border border-green-300 text-green-900 px-4 py-3 rounded relative" role="alert"
     phx-click="lv:clear-flash"
     phx-value-key="info"><%= live_flash(@flash, :info) %></p>
