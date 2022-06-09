@@ -112,3 +112,7 @@ end
 defmodule MpgWeb.GameNotFoundError do
   defexception [:message, plug_status: 404]
 end
+
+defmodule MpgWeb.PlayerNameAlreadyTakenError do
+  defexception [:message, plug_status: 404]
+end

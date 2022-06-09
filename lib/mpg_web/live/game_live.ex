@@ -11,6 +11,7 @@ defmodule MpgWeb.GameLive do
     |> Player.changeset(params)
   end
 
+  @impl true
   def mount(_params, _session, socket) do
     {:ok,
      assign(socket, %{
@@ -20,20 +21,40 @@ defmodule MpgWeb.GameLive do
      })}
   end
 
+  defp disconnected?(reason) do
+    case reason do
+      :shutdown -> true
+      {:shutdown, shutdown_reason} when shutdown_reason in [:left, :closed] -> true
+      _other -> false
+    end
+  end
+
+  @impl true
+  def terminate(reason, %{assigns: %{code: code, player: player}}) do
+    if disconnected?(reason) and player do
+      code |> Game.drop_player(player.name)
+    end
+  end
+
+  @impl true
   def handle_params(%{"code" => code}, _url, socket) do
     if !Game.exists(code) do
       raise MpgWeb.GameNotFoundError, "no game found for #{code}"
     end
 
-    PubSub.subscribe(Mpg.PubSub, code)
+    if connected?(socket) do
+      PubSub.subscribe(Mpg.PubSub, code)
+    end
 
     {:noreply, socket |> assign(code: code)}
   end
 
+  @impl true
   def handle_info({:players, players}, socket) do
     {:noreply, socket |> assign(players: players)}
   end
 
+  @impl true
   def handle_event("validate", %{"player" => params}, socket) do
     {:noreply,
      assign(socket,
@@ -42,14 +63,33 @@ defmodule MpgWeb.GameLive do
   end
 
   def handle_event("save", %{"player" => params}, socket) do
-    case Ecto.Changeset.apply_action(changeset(params), :insert) do
+    changeset = changeset(params)
+
+    case Ecto.Changeset.apply_action(changeset, :insert) do
       {:ok, player} ->
-        socket.assigns.code |> Game.add_player(player.name)
-        {:noreply, assign(socket, player: player)}
+        response = socket.assigns.code |> Game.add_player(player.name)
+
+        if response == :player_already_added do
+          {:noreply,
+           assign(socket,
+             changeset:
+               changeset
+               |> Ecto.Changeset.add_error(:name, "name already taken")
+               |> Map.put(:action, :update)
+           )}
+        else
+          {:noreply, assign(socket, player: player)}
+        end
 
       {:error, changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
+  end
+
+  def handle_event("start", _value, socket) do
+    socket.assigns.code |> Game.start()
+
+    {:noreply, socket}
   end
 
   def is_creator(players, player) do
@@ -59,6 +99,7 @@ defmodule MpgWeb.GameLive do
       |> Enum.at(0)
   end
 
+  @impl true
   def render(assigns) do
     ~H"""
     <%= if !@player do %>
@@ -83,7 +124,7 @@ defmodule MpgWeb.GameLive do
       </.form>
     <% else %>
       <h1 class="text-3xl">Join using code</h1>
-      <span class="block box-input text-3xl bg-transparent"><%= @code %></span>
+      <input disabled class="box-input text-3xl" value={@code}>
       <h1 class="text-3xl mt-2">Who else is here</h1>
       <ol class="list-disc min-h-[40vh] text-left">
         <%= for player <- Enum.reverse(@players) do %>
@@ -94,7 +135,11 @@ defmodule MpgWeb.GameLive do
         <% end %>
       </ol>
       <.action_bar>
+      <%= if is_creator(@players, @player.name) do %>
         <button phx-click="start" class="btn-action">Start Game</button>
+      <% else %>
+        <button disabled class="btn-action">Waiting for host to start...</button>
+      <% end %>
       </.action_bar>
     <% end %>
     """
