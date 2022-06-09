@@ -20,6 +20,10 @@ defmodule Mpg.Game do
 
   @vote_time 3 * 60 * 1000
 
+  def role_cards do
+    [werewolf: "🐺", seer: "🧙‍♀️", robber: "😈", troublemaker: "🤭", villager: "🧑‍🌾"]
+  end
+
   ## API
   def start_link(name) do
     GenServer.start_link(__MODULE__, name, name: via_tuple(name))
@@ -270,7 +274,8 @@ defmodule Mpg.Game do
     head_stages() ++ passive_roles() ++ tail_stages()
   end
 
-  defp role_sets(player_count) do
+  # TODO: Make this private again
+  def role_sets(player_count) do
     default = [:werewolf | roles()]
 
     case player_count do

@@ -17,7 +17,8 @@ defmodule MpgWeb.GameLive do
      assign(socket, %{
        changeset: changeset(),
        player: nil,
-       players: []
+       players: [],
+       state: nil
      })}
   end
 
@@ -52,6 +53,12 @@ defmodule MpgWeb.GameLive do
   @impl true
   def handle_info({:players, players}, socket) do
     {:noreply, socket |> assign(players: players)}
+  end
+
+  @impl true
+  def handle_info(:state_changed, %{assigns: %{code: code, player: player}} = socket) do
+    state = code |> Game.get_state_for_player(player.name)
+    {:noreply, socket |> assign(state: state)}
   end
 
   @impl true
@@ -92,6 +99,12 @@ defmodule MpgWeb.GameLive do
     {:noreply, socket}
   end
 
+  def handle_event("continue", _value, %{assigns: %{code: code, player: player}} = socket) do
+    IO.puts("continue")
+    code |> Game.continue(player.name)
+    {:noreply, socket}
+  end
+
   def is_creator(players, player) do
     player ==
       players
@@ -122,7 +135,8 @@ defmodule MpgWeb.GameLive do
           <%= submit "Continue", class: "btn-action" %>
         </.action_bar>
       </.form>
-    <% else %>
+    <% end %>
+    <%= if !@state && @player do %>
       <h1 class="text-3xl">Join using code</h1>
       <input disabled class="box-input text-3xl" value={@code}>
       <h1 class="text-3xl mt-2">Who else is here</h1>
@@ -135,13 +149,28 @@ defmodule MpgWeb.GameLive do
         <% end %>
       </ol>
       <.action_bar>
-      <%= if is_creator(@players, @player.name) do %>
-        <button phx-click="start" class="btn-action">Start Game</button>
-      <% else %>
-        <button disabled class="btn-action">Waiting for host to start...</button>
-      <% end %>
+        <%= if is_creator(@players, @player.name) do %>
+          <button phx-click="start" class="btn-action">Start Game</button>
+        <% else %>
+          <button disabled class="btn-action">Waiting for host to start...</button>
+        <% end %>
       </.action_bar>
     <% end %>
+    <%= if @state && @player do %>
+      <%= if @state.stage == :roles do %>
+          <.live_component module={StageRoles} id="roles" state={@state} player_count={length(@players)} />
+      <% end %>
+      <.action_bar>
+        <%= if @state.waiting_on_you do %>
+          <button phx-click="continue" class="btn-action">Continue</button>
+        <% else %>
+          <button disabled class="btn-action">Wait for others...</button>
+        <% end %>
+      </.action_bar>
+    <% end %>
+    <pre style="white-space: pre-wrap">
+      <%= inspect(@state) %>
+    </pre>
     """
   end
 end

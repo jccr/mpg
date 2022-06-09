@@ -45,8 +45,12 @@
   .btn-action {
     @apply btn-primary flex justify-center items-center flex-1;
   }
+  .box {
+    @apply w-full p-3 mt-1 border-2 border-gray-400 rounded rounded-xl text-center;
+  }
+
   .box-input {
-    @apply w-full p-3 mt-1 border-2 border-gray-400 rounded bg-gray-600 rounded-xl disabled:bg-transparent text-center;
+    @apply box bg-gray-600 disabled:bg-transparent;
   }
 }
 
