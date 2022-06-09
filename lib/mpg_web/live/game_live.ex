@@ -169,6 +169,9 @@ defmodule MpgWeb.GameLive do
       <%= if @state.stage == :seer and @state.stage_matches_role do %>
           <.live_component module={StageSeer} id="seer" code={@code} player_name={@player.name} />
       <% end %>
+      <%= if @state.stage == :robber and @state.stage_matches_role do %>
+          <.live_component module={StageRobber} id="robber" code={@code} player_name={@player.name} />
+      <% end %>
       <.action_bar>
         <%= if @state.waiting_on_you do %>
           <button phx-click="continue" class="btn-action">Continue</button>
