@@ -20,10 +20,6 @@ defmodule Mpg.Game do
 
   @vote_time 3 * 60 * 1000
 
-  # def role_cards do
-  #   [werewolf: "🐺", seer: "🧙‍♀️", robber: "😈", troublemaker: "🤭", villager: "🧑‍🌾"]
-  # end
-
   ## API
   def start_link(name) do
     GenServer.start_link(__MODULE__, name, name: via_tuple(name))
@@ -151,7 +147,7 @@ defmodule Mpg.Game do
 
   def handle_call({:continue, player}, _from, state) do
     Task.start_link(fn ->
-      PubSub.broadcast(Mpg.PubSub, state.code, {:state_changed})
+      PubSub.broadcast(Mpg.PubSub, state.code, :state_changed)
     end)
 
     continue_next_stage(state, player)
@@ -169,24 +165,29 @@ defmodule Mpg.Game do
   end
 
   def handle_call(:start, _from, state) do
-    Task.start_link(fn ->
-      PubSub.broadcast(Mpg.PubSub, state.code, {:state_changed})
-    end)
-
     players = all_players(state.players_status)
+    player_count = length(players)
 
-    {center_cards, player_cards} = assign_cards(role_sets(length(players)), players)
+    if player_count < 3 do
+      {:reply, :not_enough_players, state, @timeout}
+    else
+      Task.start_link(fn ->
+        PubSub.broadcast(Mpg.PubSub, state.code, :state_changed)
+      end)
 
-    {:reply, :started,
-     %{
-       state
-       | started: true,
-         waiting_for: players,
-         stage: List.first(stages()),
-         center_cards: center_cards,
-         player_cards: player_cards,
-         player_roles: player_cards
-     }, @timeout}
+      {center_cards, player_cards} = assign_cards(role_sets(player_count), players)
+
+      {:reply, :started,
+       %{
+         state
+         | started: true,
+           waiting_for: players,
+           stage: List.first(stages()),
+           center_cards: center_cards,
+           player_cards: player_cards,
+           player_roles: player_cards
+       }, @timeout}
+    end
   end
 
   def handle_call({:add_player, player}, _from, state) do
