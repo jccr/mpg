@@ -14,12 +14,36 @@
   text-transform: uppercase;
 }
 
+.font-serif {
+  font-family: "Gentium Basic", serif;
+}
+
+@layer base {
+  html {
+    font-family: "PT Sans", sans-serif;
+  }
+
+  body {
+    @apply bg-zinc-900 text-gray-200;
+    background-image: url("/images/bg.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  label {
+    @apply font-serif font-bold leading-normal text-white;
+  }
+}
+
 @layer components {
   .btn-primary {
-    @apply w-full p-3 mt-1 border-2 border-amber-600 rounded bg-amber-700 rounded-xl hover:bg-amber-600 active:bg-amber-800;
+    @apply text-white w-full p-3 border-2 border-amber-600 rounded bg-amber-700 rounded-xl hover:bg-amber-600 active:bg-amber-800;
   }
   .btn-action {
-    @apply btn-primary flex-1;
+    @apply btn-primary flex justify-center items-center flex-1;
   }
   .box-input {
     @apply w-full p-3 mt-1 border-2 border-gray-400 rounded bg-gray-600 rounded-xl;

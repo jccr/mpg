@@ -4,6 +4,8 @@ defmodule MpgWeb.GameLive do
   alias Mpg.Game
   import ActionBar
 
+  alias Phoenix.PubSub
+
   def changeset(params \\ %{}) do
     %Player{}
     |> Player.changeset(params)
@@ -13,7 +15,8 @@ defmodule MpgWeb.GameLive do
     {:ok,
      assign(socket, %{
        changeset: changeset(),
-       player: nil
+       player: nil,
+       players: []
      })}
   end
 
@@ -22,7 +25,13 @@ defmodule MpgWeb.GameLive do
       raise MpgWeb.GameNotFoundError, "no game found for #{code}"
     end
 
+    PubSub.subscribe(Mpg.PubSub, code)
+
     {:noreply, socket |> assign(code: code)}
+  end
+
+  def handle_info({:players, players}, socket) do
+    {:noreply, socket |> assign(players: players)}
   end
 
   def handle_event("validate", %{"player" => params}, socket) do
@@ -43,12 +52,19 @@ defmodule MpgWeb.GameLive do
     end
   end
 
+  def is_creator(players, player) do
+    player ==
+      players
+      |> Enum.reverse()
+      |> Enum.at(0)
+  end
+
   def render(assigns) do
     ~H"""
     <%= if !@player do %>
-      <.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
+      <.form let={f} for={@changeset} phx-change="validate" phx-submit="save" class="w-full">
         <div class="flex flex-col gap-4 h-64">
-          <%= label f, :name, "Give yourself a name", class: "text-2xl" %>
+          <%= label f, :name, "Give yourself a name", class: "text-3xl" %>
           <%= text_input f, :name, [
             class: "box-input text-center text-2xl",
             minlength: 1,
@@ -66,11 +82,17 @@ defmodule MpgWeb.GameLive do
         </.action_bar>
       </.form>
     <% else %>
-      Welcome, <%= @player.name %>
-      <div>
-        <h1>Players can join using code:</h1>
-        <span class="block box-input text-2xl"><%= @code %></span>
-      </div>
+      <h1 class="text-3xl">Join using code</h1>
+      <span class="block box-input text-3xl bg-transparent"><%= @code %></span>
+      <h1 class="text-3xl mt-2">Who else is here</h1>
+      <ol class="list-disc min-h-[40vh] text-left">
+        <%= for player <- Enum.reverse(@players) do %>
+          <li>
+            <span class="text-2xl"><%= player %></span>
+            <%= if is_creator(@players, player) do %> (host)<% end %>
+          </li>
+        <% end %>
+      </ol>
       <.action_bar>
         <button phx-click="start" class="btn-action">Start Game</button>
       </.action_bar>

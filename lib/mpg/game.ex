@@ -1,7 +1,8 @@
 defmodule Mpg.Game do
   use GenServer, restart: :transient
+  alias Phoenix.PubSub
 
-  @initial_state %{players: []}
+  @initial_state %{players: [], code: nil}
 
   # shutdown after 15 mins of inactivity
   @timeout 15 * 60 * 1000
@@ -29,8 +30,8 @@ defmodule Mpg.Game do
 
   ## GenServer callbacks
   @impl true
-  def init(_name) do
-    {:ok, @initial_state, @timeout}
+  def init(name) do
+    {:ok, %{@initial_state | code: name}, @timeout}
   end
 
   @impl true
@@ -40,12 +41,19 @@ defmodule Mpg.Game do
 
   @impl true
   def handle_call({:add_player, new_player}, _from, state) do
-    new_state =
-      Map.update!(state, :players, fn existing_players ->
-        [new_player | existing_players]
-      end)
+    state =
+      if !(new_player in state.players) do
+        %{state | players: [new_player | state.players]}
+      else
+        state
+      end
 
-    {:reply, :player_added, new_state, @timeout}
+    # Map.update!(state, :players, fn existing_players ->
+    #   [new_player | existing_players]
+    # end)
+
+    PubSub.broadcast(Mpg.PubSub, state.code, {:players, state.players})
+    {:reply, :player_added, state, @timeout}
   end
 
   @impl true

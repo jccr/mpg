@@ -37,7 +37,7 @@ defmodule MpgWeb.LobbyLive.Join do
     ~H"""
     <.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
       <div class="flex flex-col gap-4 h-64">
-        <%= label f, :code, "Join a game with this code", class: "text-2xl" %>
+        <%= label f, :code, "Join a game with this code", class: "text-3xl" %>
         <%= text_input f, :code, [
           class: "box-input text-center text-2xl",
           minlength: 4,

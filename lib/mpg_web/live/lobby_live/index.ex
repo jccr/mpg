@@ -13,13 +13,14 @@ defmodule MpgWeb.LobbyLive.Index do
     <style>
       header {
         background-image: url('/images/splash.png');
-        background-position: center;
-        background-size: cover;
+        background-position: center -3vh;
+        background-size: 72vh;
+        background-repeat: no-repeat;
       }
     </style>
-    <header class="h-screen">
-      <h1 class="text-4xl font-normal leading-normal mt-10 mb-2">One Night Werewolf</h1>
-      <h2 class="text-2xl font-normal leading-normal mt-5 mb-2">Multiplayer Party Game</h2>
+    <header class="h-[60vh] w-full">
+      <h1 class="text-4xl mt-10 mb-2">One Night Werewolf</h1>
+      <h2 class="text-2xl font-normal mt-5 mb-2">Multiplayer Party Game</h2>
     </header>
     <.action_bar>
       <%= live_redirect "Create Game", class: "btn-action", to: Routes.live_path(@socket, MpgWeb.GameLive, GameSupervisor.start_game()) %>

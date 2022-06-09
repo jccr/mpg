@@ -13,6 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic:wght@400;700&family=PT+Sans&display=swap" rel="stylesheet">
   </head>
   <body>
-    <%= @inner_content %>
+    <main class="container w-full md:max-w-3xl mx-auto h-screen p-4 flex flex-col justify-center items-center text-center">
+      <p class="text-x capitalize"><%= assigns.reason.message %></p>
+      <%= link "Back to Lobby", class: "btn-primary w-64 mt-10", to: "/" %>
+    </main>
   </body>
 </html>
