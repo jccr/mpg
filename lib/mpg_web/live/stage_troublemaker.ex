@@ -14,9 +14,9 @@ defmodule StageTroublemaker do
 
     ~H"""
     <section class="inline-block">
-      <h1 class="text-3xl">Wake up, <%= Game.role_cards[:robber] %> Robber!</h1>
+      <h1 class="text-3xl">Wake up, <%= Game.role_cards[:troublemaker] %> Troublemaker!</h1>
         <p>You feel like up to no good, and want to cause mischief on the townsfolk.</p>
-        <p class="text-bold">You manage to swap the roles of two others!</p>
+        <p class="font-bold mx-2 text-xl">You manage to swap the roles of two others!</p>
         <figure class="flex flex-col mt-6 gap-1">
         <span class="box text-xl flex items-center justify-center gap-4">
           <span class="text-3xl"><%= Game.role_cards[player_card_1] %></span>

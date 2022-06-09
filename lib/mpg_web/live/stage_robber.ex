@@ -12,9 +12,9 @@ defmodule StageRobber do
     <section class="inline-block">
       <h1 class="text-3xl">Wake up, <%= Game.role_cards[:robber] %> Robber!</h1>
         <p>You feel like you could gain from taking something...</p>
-        <p class="text-bold">You have stolen the role of a victim! You are now known for this role.</p>
+        <p class="font-bold mx-2 text-xl">You have stolen the role of a victim! You are now known for this role.</p>
         <p>As a final misgiving, you also frame this person as the Robber!</p>
-        <figure class="flex flex-col mt-6 gap-1">
+        <figure class="flex flex-col mt-6 gap-2">
         <span class="box text-xl flex items-center justify-center gap-4">
           <span class="text-3xl"><%= Game.role_cards[player_card] %></span>
           <%= chosen_player %>

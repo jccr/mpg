@@ -175,6 +175,15 @@ defmodule MpgWeb.GameLive do
       <%= if @state.stage == :troublemaker and @state.stage_matches_role do %>
           <.live_component module={StageTroublemaker} id="troublemaker" code={@code} player_name={@player.name} />
       <% end %>
+      <%= if @state.stage == :vote do %>
+          <h1 class="text-3xl">Discuss & Vote to reveal the Werewolf!</h1>
+      <% end %>
+      <%= if @state.stage == :conclusion do %>
+          <.live_component module={StageConclusion} id="conclusion" code={@code} player_name={@player.name} />
+      <% end %>
+      <%= if not @state.waiting_on_you and @state.waiting and not @state.stage_matches_role do %>
+          <h1 class="text-3xl">You sleep, waiting for day break...</h1>
+      <% end %>
       <.action_bar>
         <%= if @state.waiting_on_you do %>
           <button phx-click="continue" class="btn-action">Continue</button>
@@ -183,9 +192,6 @@ defmodule MpgWeb.GameLive do
         <% end %>
       </.action_bar>
     <% end %>
-    <pre style="white-space: pre-wrap">
-      <%= inspect(@state) %>
-    </pre>
     """
   end
 end
