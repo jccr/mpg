@@ -5,7 +5,7 @@ defmodule StageRoles do
   def render(assigns) do
     ~H"""
     <section class="inline-block">
-      <h1 class="text-3xl">Roles</h1>
+      <h1 class="text-3xl mb-6">Roles</h1>
       <p>We've spotted these characters roaming around the town!</p>
       <p>Some of them could show up tonight...</p>
       <figure class="flex flex-col mt-6">

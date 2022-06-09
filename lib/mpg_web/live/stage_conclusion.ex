@@ -7,7 +7,7 @@ defmodule StageConclusion do
 
     ~H"""
     <section class="inline-block">
-      <h1 class="text-3xl">The big reveal!</h1>
+      <h1 class="text-3xl mb-6">The big reveal!</h1>
       <p>Here are all the final player's roles...</p>
       <figure class="flex flex-col mt-6">
       <%= for {player, role} <- player_cards do %>

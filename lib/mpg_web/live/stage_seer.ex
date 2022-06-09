@@ -9,9 +9,9 @@ defmodule StageSeer do
 
     ~H"""
     <section class="inline-block">
-      <h1 class="text-3xl">Wake up, <%= Game.role_cards[:seer] %> Seer!</h1>
+      <h1 class="text-3xl mb-6">Wake up, <%= Game.role_cards[:seer] %> Seer!</h1>
         <p>You use your magical powers on someone to reveal...</p>
-        <p class="font-bold mx-2 text-xl">This townsfolk is actually this role!</p>
+        <p class="font-bold my-2 text-xl">This townsfolk is actually this role!</p>
         <p>You feel like you've got to do something knowing this.</p>
         <figure class="flex flex-col mt-6 gap-2">
         <span class="box text-xl flex items-center justify-center gap-4">

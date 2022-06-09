@@ -5,7 +5,7 @@ defmodule StagePlayerRole do
   def render(assigns) do
     ~H"""
     <section class="inline-block">
-      <h1 class="text-3xl">Your Role</h1>
+      <h1 class="text-3xl mb-6">Your Role</h1>
       <p>You're hiding the fact that you are a...</p>
       <figure class="flex flex-col mt-6">
       <span class="box capitalize text-xl flex items-center justify-center gap-4">

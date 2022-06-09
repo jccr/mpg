@@ -8,10 +8,10 @@ defmodule StageWerewolf do
 
     ~H"""
     <section class="inline-block">
-      <h1 class="text-3xl">Wake up, <%= Game.role_cards[:werewolf] %> Werewolf!</h1>
+      <h1 class="text-3xl mb-6">Wake up, <%= Game.role_cards[:werewolf] %> Werewolf!</h1>
       <%= if Enum.count(partners) == 0 do %>
         <p>You sniff around and realise you're a lone wolf.</p>
-        <p class="font-bold mx-2 text-xl">You sense that one character is NOT among the townsfolk.</p>
+        <p class="font-bold my-2 text-xl">You sense that one character is NOT among the townsfolk.</p>
         <p>Maybe you can use this knowledge to your advantage!</p>
         <p>Remember, don't let the others find out what you are...</p>
         <figure class="flex flex-col mt-6 gap-2">
@@ -22,7 +22,7 @@ defmodule StageWerewolf do
         </figure>
       <% else %>
         <p>You are not alone, there's another werewolf roaming around!</p>
-        <p class="font-bold mx-2 text-xl">Become allies with them and take on the town!</p>
+        <p class="font-bold my-2 text-xl">Become allies with them and take on the town!</p>
         <p>Remember, don't let the others find out what you are...</p>
         <figure class="flex flex-col mt-6 gap-2">
         <span class="box text-xl flex items-center justify-center gap-4">
