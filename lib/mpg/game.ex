@@ -65,6 +65,10 @@ defmodule Mpg.Game do
     game_code |> via_tuple() |> GenServer.call({:get_player_card, player_name})
   end
 
+  def get_player_role(game_code, player_name) do
+    game_code |> via_tuple() |> GenServer.call({:get_player_role, player_name})
+  end
+
   def get_player_role_partners(game_code, player_name) do
     game_code |> via_tuple() |> GenServer.call({:get_player_role_partners, player_name})
   end
@@ -97,7 +101,7 @@ defmodule Mpg.Game do
 
   @impl true
   def handle_call(:list_players, _from, state) do
-    {:reply, state.players, state, @timeout}
+    {:reply, all_players(state.players_status), state, @timeout}
   end
 
   def handle_call(:get_internal_state, _from, state) do
@@ -110,6 +114,10 @@ defmodule Mpg.Game do
 
   def handle_call({:get_player_card, player}, _from, state) do
     {:reply, state.player_cards[player], state, @timeout}
+  end
+
+  def handle_call({:get_player_role, player}, _from, state) do
+    {:reply, state.player_roles[player], state, @timeout}
   end
 
   def handle_call({:get_player_role_partners, player}, _from, state) do
@@ -259,7 +267,7 @@ defmodule Mpg.Game do
   end
 
   defp head_stages do
-    [:roles]
+    [:roles, :player_role]
   end
 
   defp tail_stages do
