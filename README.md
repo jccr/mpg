@@ -1,6 +1,6 @@
 # Multiplayer Party Game
 
-Try it live at http://mpg.fly.io  
+Try it live at https://mpg.fly.dev/
 
 Open in multiple tabs & experience a Jackbox-style game inspired by [🐺 One Night Ultimate Werewolf](https://boardgamegeek.com/boardgame/147949/one-night-ultimate-werewolf)!
 
