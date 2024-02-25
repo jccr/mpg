@@ -9,7 +9,7 @@ Open in multiple tabs & experience a Jackbox-style game inspired by [🐺 One Ni
 https://github.com/jccr/mpg/assets/5132652/d6eb0948-1876-4fd9-996a-80e64722968b
 
 ## Project Brief
-> **Preface:** I took on this project during my time as an Engineering Partner at [Commit.dev](https://commit.dev/for-developers/).
+> **Preface:** On June of 2022, I took on this project during my time as an Engineering Partner at [Commit.dev](https://commit.dev/for-developers/).
 > 
 > I had an opportunity to embark on a 1-week solo hackathon project, the goal being to build anything that would help me grow as a developer, and to present the final results to a panel of peers and mentors.
 >
